@@ -4,7 +4,8 @@ Implementación del algoritmo Analizador Sintáctico LR para gramáticas de clas
 ## Estructura del proyecto
 A continuacion se describe la estructura de los directorios:
 - `tests`: Archivos txt de prueba para el analizador.
-- `utils`: Archivos py de componentes para el analizador.
+- `utils`: Archivos py de herramientas generales para compiladores.
+- `components`: Archivos py de componentes para el analizador.
 
 ### Variables
 El programa utiliza las siguientes variables:

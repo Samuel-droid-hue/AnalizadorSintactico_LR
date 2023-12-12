@@ -1,13 +1,4 @@
-# Get data structure to augmented grammar
-def get_grammar(path):
-    with open(path, "r") as file:
-        content = file.readlines()
-    
-    grammar = []
-    for line in content:
-        grammar.append(line.strip().split(" -> "))
-
-    return grammar
+import utils.grammar as gm
 
 # Get data structure to token strip
 def get_tokens(path):
@@ -23,7 +14,7 @@ def get_tokens(path):
 # ------------- ANALYZER ------------- #
 def to_analyze(grammar_path, tokens_path):
     # Variables
-    augmentedGrammar = get_grammar(grammar_path)
+    augmentedGrammar = gm.get_grammar(grammar_path)
     tokenStrip = get_tokens(tokens_path)
     tokenStrip.append('$')
     stack = [0]
