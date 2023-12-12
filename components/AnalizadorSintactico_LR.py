@@ -14,7 +14,7 @@ def get_tokens(path):
 # ------------- ANALYZER ------------- #
 def to_analyze(grammar_path, tokens_path):
     # Variables
-    augmentedGrammar = gm.get_grammar(grammar_path)
+    augmentedGrammar = gm.get_ASgrammar(grammar_path)
     tokenStrip = get_tokens(tokens_path)
     tokenStrip.append('$')
     stack = [0]

@@ -1,5 +1,6 @@
 from components.ColeccionCanonica import coleccion_canonica
 from components.PrimerosSiguientes import PrimerosYsiguientes
+from utils.grammar import get_TAgrammar
 
 #Programa que contiene la función para obtener la tabla de análisis sintáctico, así como sus funciones auxiliares
 
@@ -207,7 +208,7 @@ def gramaticaSinEspacios(gramatica):    #funcion que crea una nueva gramática o
         nuevaGramatica.append(regla.replace(" ", ""))
     return nuevaGramatica
 
-def to_create():
+def to_create(path):
     #Gramática 1
     #NT = ["E", "T", "F"]
     #TE = ["+", "*", "(", ")", "id"]
@@ -221,16 +222,17 @@ def to_create():
     #]
 
     #Gramática 2
-    NT = ["D", "L", "T"]
-    TE = ["id", ";", ",", "float", "int"]
-    Reglas = [
-        "D T id L ;",
-        "L , id L",
-        "L @",
-        "T float",
-        "T int"
-    ]
+    # NT = ["D", "L", "T"]
+    # TE = ["id", ";", ",", "float", "int"]
+    # Reglas = [
+    #     "D T id L ;",
+    #     "L , id L",
+    #     "L @",
+    #     "T float",
+    #     "T int"
+    # ]
 
+    NT, TE, Reglas = get_TAgrammar(path)
     #Script
     Reglas2 = gramaticaSinEspacios(Reglas)  #crea la gramatica sin espacios, para usarla en PrimerosYsiguientes()
     PYS = PrimerosYsiguientes(TE, NT, Reglas2)  #obtiene primeros y siguientes, en un diccionario
