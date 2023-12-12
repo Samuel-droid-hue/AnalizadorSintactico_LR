@@ -240,29 +240,31 @@ def to_create(path):
     ir_a_NT, ir_a_TE, states = coleccion_canonica(NT, TE, Reglas)   #obtiene los ir_a de terminales y no terminales y la lista de estados
     tablaAS = tablaDeAnalisisSintactico(Reglas, states, ir_a_TE, ir_a_NT, siguientes, TE, NT)   #obtiene la tabla de análisis sintáctico
     
-    print("-------------REGLAS2----------")
-    for m in Reglas2:
-        print(m)
-    print("\n")
-    print("-------------REGLAS----------")
-    for n in Reglas:
-        print(n)
-    print("\n")
-    print("-------------SIGUIENTES----------")
-    for l in siguientes:
-        print(l)
-    print("\n")
-    print("-------------IR_A_NT----------")
-    for i in ir_a_NT:
-        print(i)
-    print("\n")
-    print("-------------IR_A_TE----------")
-    for j in ir_a_TE:
-        print(j)
-    print("\n")
-    print("------------ESTATES-----------")
-    for k in states:
-        print(k)
-    print("\n")
-    print("------------TAS-----------")
-    imprimirTabla(tablaAS, TE, NT)
+    # print("-------------REGLAS2----------")
+    # for m in Reglas2:
+    #     print(m)
+    # print("\n")
+    # print("-------------REGLAS----------")
+    # for n in Reglas:
+    #     print(n)
+    # print("\n")
+    # print("-------------SIGUIENTES----------")
+    # for l in siguientes:
+    #     print(l)
+    # print("\n")
+    # print("-------------IR_A_NT----------")
+    # for i in ir_a_NT:
+    #     print(i)
+    # print("\n")
+    # print("-------------IR_A_TE----------")
+    # for j in ir_a_TE:
+    #     print(j)
+    # print("\n")
+    # print("------------ESTATES-----------")
+    # for k in states:
+    #     print(k)
+    # print("\n")
+    # print("------------TAS-----------")
+    # imprimirTabla(tablaAS, TE, NT)
+
+    return NT, TE, tablaAS
