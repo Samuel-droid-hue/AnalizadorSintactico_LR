@@ -16,9 +16,11 @@ def get_tokens(path):
 # ------------------------------
 # WARNING!: TOO MUCH PARAMAETERS
 # ------------------------------
-def action(TA, NT, TE, s, a):
+# s: State number
+# a: Symbol
+def get_action(TA, NT, TE, s, a):
     # Get i index
-    i = s
+    i = int(s)
     # Get j index
     if a in TE:
         j = TE.index(a)
@@ -31,13 +33,38 @@ def action(TA, NT, TE, s, a):
 def to_analyze(grammar_path, tokens_path):
     # Variables
     augmentedGrammar = gm.get_ASgrammar(grammar_path)
-    tokenStrip = get_tokens(tokens_path)
-    tokenStrip.append('$')
-    stack = [0]
+    stack = []
     input = []
+    action = []
+    error = False
+    production = 0
 
-    # Get the table and more
-    NT, TE, TA = ta.to_create("tests/pastor_grammar.txt")
+    # Get the table and more values
+    NT, TE, TA = ta.to_create(grammar_path)
     TE.append('$')
+    input = get_tokens(tokens_path)
+    input.append('$')
+    
+    # Algorithm
+    stack.append(0)
 
-    print(action(TA, NT, TE, 0, 'float'))
+    # Prints to show input
+    print("Pila\t\tEntrada\t\tAccion")
+
+    for iteration in range(14):
+        case_action = get_action(TA, NT, TE, stack[-1], input[0])
+        if case_action[0] == 'd':
+            print(stack, "\t\t", input, "\t\t", case_action)
+            stack.append(input[0])
+            stack.append(int(case_action[-1]))
+            input.pop(0)
+        else:
+            print(stack, "\t\t", input, "\t\t", case_action, " ", augmentedGrammar[int(case_action[-1])])
+            # print(augmentedGrammar[int(case_action[-1])][-1].count(' ')+1)
+            for j in range(0, 2*(augmentedGrammar[int(case_action[-1])][-1].count(' ')+1)):
+                stack.pop()
+            # Append not termial of the ruler select before <-
+            j = stack[-1]
+            stack.append(augmentedGrammar[int(case_action[-1])][0])
+            ir_a = get_action(TA, NT, TE, j, augmentedGrammar[int(case_action[-1])][0])
+            stack.append(ir_a)
