@@ -73,6 +73,8 @@ def tablaDeAnalisisSintactico(Gramatica, coleccionEstados, ir_aTerminales, ir_aN
         for elemento in estado:
             if puntoAlFinal(elemento):
                 nuevaCadena = modificar_cadena(elemento)    #elimina el punto y el espacio del final del elemento y lo guarda en una nueva cadena
+                if len(nuevaCadena) == 1:
+                    nuevaCadena = nuevaCadena + " @"
                 noTerminal = nuevaCadena[0]     #resguarda el no terminal del que se usarán los siguientes
                 for numRegla in range(lenGramatica):    #busca la producción en la gramática
                     if nuevaCadena == Gramatica[numRegla]:  #cuando encuentra la producción en la gramática, comienza a ingresar los remplazar(r)

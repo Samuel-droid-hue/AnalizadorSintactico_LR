@@ -101,8 +101,9 @@ def to_analyze(grammar_path, tokens_path):
                 production = augmentedGrammar[index]
                 # print(stack, "\t\t", input, "\t\t", case_action, " ", production)
                 analysis.append(get_rowr(stack, input, case_action, production))
-                for j in range(0, 2*(production[-1].count(' ')+1)):
-                    stack.pop()
+                if production[-1] != '@':
+                    for j in range(0, 2*(production[-1].count(' ')+1)):
+                        stack.pop()
                 j = stack[-1]
                 stack.append(production[0])
                 ir_a = get_action(TA, NT, TE, j, production[0])
