@@ -29,13 +29,27 @@ def get_action(TA, NT, TE, s, a):
     
     return TA[i][j]
 
+def find_error(row, TE):
+    indexs = []
+    symbols = []
+    n = len(TE)-1
+
+    for i in range(0, n):
+        if row[i] != '  ':
+            indexs.append(i)
+
+    for j in indexs:
+        symbols.append(TE[j])
+    
+    return symbols
+
 # ------------- ANALYZER ------------- #
 def to_analyze(grammar_path, tokens_path):
     # Variables
     augmentedGrammar = gm.get_ASgrammar(grammar_path)
     stack = []
     input = []
-    action = []
+    accept = False
     error = False
     production = 0
 
@@ -51,23 +65,31 @@ def to_analyze(grammar_path, tokens_path):
     # Prints to show input
     print("Pila\t\tEntrada\t\tAccion")
 
-    for iteration in range(14):
+    while not (accept or error):
         case_action = get_action(TA, NT, TE, stack[-1], input[0])
-        if case_action[0] == 'd':
-            print(stack, "\t\t", input, "\t\t", case_action)
-            stack.append(input[0])
-            stack.append(int(case_action[-1]))
-            input.pop(0)
-        elif case_action[0] == 'r':
+        if case_action[0] in {'d', 'r'}:
+            # Calculates index of dn or rn
             index = case_action[1:]
             index = int(index)
-            production = augmentedGrammar[index]
-            print(stack, "\t\t", input, "\t\t", case_action, " ", production)
-            for j in range(0, 2*(production[-1].count(' ')+1)):
-                stack.pop()
-            j = stack[-1]
-            stack.append(production[0])
-            ir_a = get_action(TA, NT, TE, j, production[0])
-            stack.append(ir_a)
+            if case_action[0] == 'd':
+                print(stack, "\t\t", input, "\t\t", case_action)
+                stack.append(input[0])
+                stack.append(index)
+                input.pop(0)
+            elif case_action[0] == 'r':
+                production = augmentedGrammar[index]
+                print(stack, "\t\t", input, "\t\t", case_action, " ", production)
+                for j in range(0, 2*(production[-1].count(' ')+1)):
+                    stack.pop()
+                j = stack[-1]
+                stack.append(production[0])
+                ir_a = get_action(TA, NT, TE, j, production[0])
+                stack.append(ir_a)
         else:
-            print(stack, "\t\t", input, "\t\t", case_action)
+            if case_action == 'AC':
+                print(stack, "\t\t", input, "\t\t", case_action)
+                accept = True
+            else:
+                symbols = find_error(TA[stack[-1]], TE)
+                print(stack, "\t\t", input, "\t\tError se esperaba: ", symbols)
+                error = True
