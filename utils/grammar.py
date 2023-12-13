@@ -25,3 +25,12 @@ def get_TAgrammar(path):
         grammar.append(line.strip().replace(" -> ", " "))
 
     return NT, TE, grammar
+
+def get_allDataTokens(path):
+    with open(path, "r") as file:
+        content = file.readlines()
+    
+    for i in range(len(content)):
+        content[i] = content[i].strip()
+
+    return content
