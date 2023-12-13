@@ -58,13 +58,16 @@ def to_analyze(grammar_path, tokens_path):
             stack.append(input[0])
             stack.append(int(case_action[-1]))
             input.pop(0)
-        else:
-            print(stack, "\t\t", input, "\t\t", case_action, " ", augmentedGrammar[int(case_action[-1])])
-            # print(augmentedGrammar[int(case_action[-1])][-1].count(' ')+1)
-            for j in range(0, 2*(augmentedGrammar[int(case_action[-1])][-1].count(' ')+1)):
+        elif case_action[0] == 'r':
+            index = case_action[1:]
+            index = int(index)
+            production = augmentedGrammar[index]
+            print(stack, "\t\t", input, "\t\t", case_action, " ", production)
+            for j in range(0, 2*(production[-1].count(' ')+1)):
                 stack.pop()
-            # Append not termial of the ruler select before <-
             j = stack[-1]
-            stack.append(augmentedGrammar[int(case_action[-1])][0])
-            ir_a = get_action(TA, NT, TE, j, augmentedGrammar[int(case_action[-1])][0])
+            stack.append(production[0])
+            ir_a = get_action(TA, NT, TE, j, production[0])
             stack.append(ir_a)
+        else:
+            print(stack, "\t\t", input, "\t\t", case_action)
