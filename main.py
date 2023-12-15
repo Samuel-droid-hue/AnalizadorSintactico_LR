@@ -163,8 +163,8 @@ class AnalizadorSintactico():
                         relief="solid",
                         background="#16DFAE",  # Color de fondo
                         foreground="black",       # Color de primer plano
-                         font=font_style
-                         )
+                        font=font_style
+                        )
                         label.grid(row=current_row, column=current_col, padx=2, pady=2)
                         current_col +=1
                 else:

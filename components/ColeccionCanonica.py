@@ -67,6 +67,8 @@ def coleccion_canonica(TE, NT, rules):
                     
         icurrent += 1
 
+    gramatical_rules.clear()
+    
     return output_ir_a_NT, output_ir_a_TE, output_states
 
 def create_rules(rules):
