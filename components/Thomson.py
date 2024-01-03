@@ -518,16 +518,16 @@ def creartabla(alfabeto,expresion):
 #expression = ['(','(','a','|','b','.','c',')','*','.','d','*',')','|','e','|','(','f','.','g',')']
 #expression = ['(','a','|','b',')','*','.','a','.','b','.','b']
 #expression=['(','i','.','f',')','|','(','letra','.','(','letra','|','digito',')','*',')']
-expression=['(','i','.','f',')','|','(','f','.','o','.','r',')','|','(','letra','.','(','letra','|','digito',')','*',')','|','(','digito','+','.','(','p','.','digito','+',')','?',')']
+#expression=['(','i','.','f',')','|','(','f','.','o','.','r',')','|','(','letra','.','(','letra','|','digito',')','*',')','|','(','digito','+','.','(','p','.','digito','+',')','?',')']
 "en la expresion anterior use p para representar el punto y no confundirlo con el operador de concatenacion"
 
 
 #alfabeto=['i','f','letra','digito']
 #alfabeto=list(alfabeto)
-alfabeto=['i','f','o','r','letra','digito','p','ϵ']
+#alfabeto=['i','f','o','r','letra','digito','p','ϵ']
 
 "el alfabeto debe contener el simbolo vacio, es obligatorio usar el simbolo ϵ para representar el vacio"
-tabla=creartabla(alfabeto,expression)
+#tabla=creartabla(alfabeto,expression)
 #print(tabla)
 #tabla=[]
 #i=0
