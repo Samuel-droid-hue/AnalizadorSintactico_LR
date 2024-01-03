@@ -1,7 +1,7 @@
-import networkx as nx# Librería para grafos
-import matplotlib.pyplot as plt# Librería para grafos
+#import networkx as nx# Librería para grafos
+#import matplotlib.pyplot as plt# Librería para grafos
 
-
+"""
 def crearGRa(f):# Función para crear un gráfico de un autómata finito
     # Crear un gráfico dirigido
     G = nx.DiGraph()
@@ -23,7 +23,7 @@ def crearGRa(f):# Función para crear un gráfico de un autómata finito
     #nx.draw(G, pos, with_labels=True, edge_color='gray')
     nx.draw_networkx_edge_labels(G, pos, edge_labels=nx.get_edge_attributes(G, 'label'))
     plt.show()
-
+"""
 
 # Función de clave personalizada para ordenar por atributo1
 def clave_de_orden(obj):
