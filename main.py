@@ -5,7 +5,6 @@ from tkinter import messagebox
 from tkinter import Scrollbar
 
 import components.AnalizadorSintactico_LR as lr
-import components.TablaAnalisis as ta
 
 class AnalizadorSintactico():
     
@@ -38,7 +37,7 @@ class AnalizadorSintactico():
         self.grammar_entry.insert(0, "")
         self.grammar_entry.config(state="readonly")
 
-        open_button_tokens = Button(self.frame, text="Abrir Tokens", background="#C0EFD2", command=lambda:self.open_file(self.tokens_entry))
+        open_button_tokens = Button(self.frame, text="Abrir Archivo", background="#C0EFD2", command=lambda:self.open_file(self.tokens_entry))
         open_button_tokens.grid(row=1, column=0, padx=10, pady=10)
         
         self.tokens_entry = Entry(self.frame, width=30)
@@ -170,6 +169,7 @@ class AnalizadorSintactico():
                 else:
                     current_row +=1
                     current_col=0
+                    
 if __name__ == "__main__":
     app = AnalizadorSintactico()
     app.root.mainloop()

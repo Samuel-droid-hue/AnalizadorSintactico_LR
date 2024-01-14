@@ -26,11 +26,8 @@ def get_TAgrammar(path):
 
     return NT, TE, grammar
 
-def get_allDataTokens(path):
+def get_content(path):
     with open(path, "r") as file:
-        content = file.readlines()
-    
-    for i in range(len(content)):
-        content[i] = content[i].strip()
+        content = file.read()
 
     return content

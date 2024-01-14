@@ -1,0 +1,168 @@
+import string
+import re
+from collections import OrderedDict
+
+class AnalizadorLexico:
+    def __init__(self):
+        self.reservadas = {
+            'printf', 'break', 'case', 'char', 'const', 'continue', 'default', 'do',
+            'double', 'else', 'enum', 'main', 'float', 'for', 'goto', 'if','bool',
+            'int', 'long', 'register', 'return', 'short', 'signed', 'sizeof', 'static',
+            'struct', 'switch', 'typedef', 'union', 'unsigned', 'void', 'volatile', 'while',
+            'auto','extern','scanf','pow','malloc','free','strlen','strcpy','fopen','fclose'
+        }
+        self.caracteres = {
+            '\n': 'salto de línea', '\t': 'tabulación', '(': 'paréntesis abierto', '{': 'llave abierta',
+            ',': 'coma', '<': 'menor que', '>': 'mayor que', '=': 'igual', '+': 'más', '-': 'menos',
+            '*': 'asterisco', ';': 'punto y coma', ' ': 'espacio', '}': 'llave cerrada',')': 'paréntesis cerrado',
+            '"': 'comillas dobles', '/': 'barra', '&': 'y', '%': 'porcentaje', '|':'barra',':':'doblep'
+            
+        }
+    def caracter_separador(self,caracter):
+        return caracter in self.caracteres
+
+    lin_num = 1
+
+    def tokenizar(self, codigo):
+        reglas = [
+            ('RESERVADO', '|'.join(re.escape(word) for word in self.reservadas)),
+            ('PARENTA', r'\('),        # (
+            ('PARENTC', r'\)'),        # )
+            ('LLAVEA', r'\{'),          # {
+            ('LLAVEC', r'\}'),          # }
+            ('COMA', r','),            # ,
+            ('PCOMA', r';'),           # ;
+            ('EQ', r'=='),              # ==
+            ('NE', r'!='),              # !=
+            ('LE', r'<='),              # <=
+            ('GE', r'>='),              # >=
+            ('OR', r'\|\|'),            # ||
+            ('AND', r'&&'),             # &&
+            ('AMPER', r'&'),             # &
+            ('PORCENT', r'%'),             # %
+            ('TWOP', r':'),             # :
+            ('COMEN_START', r'/\*'),  # Inicio de comentario /* 
+            ('COMEN_END', r'\*/'),    # Fin de comentario */
+            ('COMENT',  r'\/\/.*'),             # &&
+            ('literalCad', r'"([^"\\]*(\\.[^"\\]*)*)"'),
+            ('literalCar', r"'([^'\\]*(\\.[^'\\]*)*)'"),
+            ('ARRAY',r'[a-zA-Z1-9_]\w*\[\d+\]'),        #arreglos
+            ('ARRAYAP',r'\*[a-zA-Z1-9]*.\[[1-9]*\]'),        #apuntadores arreglos
+            ('APUNT',r'\*[a-zA-Z_]\w*'),        #apuntadores
+            ('CORCHETEA', r'\['),           # [
+            ('CORCHETEC', r'\]'),           # ]
+            ('IGUAL', r'\='),            # =
+            ('MAYOR', r'<'),               # <
+            ('MENOR', r'>'),               # >
+            ('iNCRE', r'\+\+'),            # ++
+            ('DECRE', r'--'),            # -
+            ('SUMA', r'\+'),            # +
+            ('RESTA', r'-'),            # -
+            ('MULT', r'\*'),            # *
+            ('DIV', r'\/'),             # / 
+            ('id', r'[a-zA-Z]\w*'),     # IDENTIFICADORES
+            ('nfloat', r'\d(\d)*\.\d(\d)*'),   # FLOAT
+            ('nint', r'\d(\d)*'),          # INT
+            ('NEWLINE', r'\n'),         # NUEVA LINEA
+            ('SKIP', r'[ \t]+'),        # SPACIO Y TABS
+            ('MISMATCH', r'.'),         # OTRO CARACTER
+        ]
+        tokens_unidos = '|'.join('(?P<%s>%s)' % x for x in reglas)
+
+        # Listas de salida del programa
+        simbolos=[]
+        token = []
+        lexema = []
+        fila = []
+        total = []
+        tira_token = ""
+        in_comentario = False 
+        with open(codigo, 'r') as file:
+            codigo = file.read()
+        # Analiza el código para encontrar los lexemas y sus respectivos Tokens
+        for m in re.finditer(tokens_unidos, codigo):
+            token_tipo = m.lastgroup
+            token_lexema = m.group(token_tipo)
+
+            
+            if token_tipo == 'NEWLINE':
+                self.lin_num += 1
+            elif token_tipo == 'COMEN_START':
+                in_comentario = True
+                continue  # Salta al siguiente token sin imprimir nada
+            elif token_tipo == 'COMEN_END':
+                in_comentario = False
+                continue  # Salta al siguiente token sin imprimir nada
+            elif in_comentario:
+                continue
+            elif token_tipo == 'COMENT':
+                continue
+            elif token_tipo == 'SKIP':
+                continue
+            elif token_tipo == 'MISMATCH':
+                raise RuntimeError('%r unexpected on line %d' % (token_lexema, self.lin_num))
+            else:
+
+                    token.append(token_tipo)
+                    lexema.append(token_lexema)
+                    fila.append(self.lin_num)
+                    
+                    # Imprimir información sobre un Token
+                    if token_tipo != 'id'and token_tipo != 'literalCad' and token_tipo != 'literalCar' and token_tipo != 'nint'and token_tipo != 'nfloat':
+                        if token_tipo == 'ARRAY' or token_tipo == 'ARRAYAP' or token_tipo == 'APUNT':
+                            total += ["{2}   {1}  , {0} ".format("id", token_lexema, self.lin_num)]
+                            tira_token += "id "
+                        else:
+                            total += ["{2}   {1}  , {1} ".format(token_tipo, token_lexema, self.lin_num)]
+                            tira_token += token_lexema +" "
+                    else:
+                        total += ["{2}   {1}  , {0} ".format(token_tipo, token_lexema, self.lin_num)]
+                        tira_token += token_tipo + " "
+                    if token_tipo == 'id' or token_tipo == 'ARRAY' or token_tipo == 'ARRAYAP' or token_tipo == 'APUNT':
+                        simbolos.append((token_lexema,(0)))
+        # print( '\n'.join(map(str, total)))
+        # print(tira_token)
+        return tira_token, total, simbolos 
+
+    def encontrar_error(self, archivo_path, caracteres_separadores, letra):
+        lineas_validas = []
+        errores = []
+        num_linea = 1  # Número de línea inicial
+        with open(archivo_path, 'r') as archivo:
+            for numero_linea, linea in enumerate(archivo, start=1):
+                nueva_linea = ''.join(char if char in caracteres_separadores or char in letra else (errores.append((num_linea, char)), ' ')[1] for char in linea)
+                lineas_validas.append(nueva_linea)
+                num_linea += 1
+        # Sobrescribe el archivo con las líneas válidas
+        with open(archivo_path, 'w') as archivo:
+            archivo.writelines(lineas_validas)
+
+        return archivo_path,errores
+
+def to_analyze(path):
+    analizador= AnalizadorLexico()
+    caracteres_separadores = analizador.caracteres
+    letra= string.ascii_letters + string.digits + '.' + "'" + "_" +'['+']'+'!'
+    archivo_prueba = path  # Reemplaza con el nombre de tu archivo
+    archivo_prueba, errores = analizador.encontrar_error(archivo_prueba,caracteres_separadores,letra)
+    tira_token, total, palabras_id = analizador.tokenizar(archivo_prueba)
+
+    conjunto_sin_duplicados = OrderedDict()
+
+    # Iteración sobre la lista palabras_id_unicas para crear un conjunto sin duplicados:
+
+    for elemento in palabras_id:
+        conjunto_sin_duplicados[elemento] = None  # Usamos el objeto None como marcador
+    
+    # print( '\n'.join(map(str, total)))
+    # print(tira_token)
+
+    # print("\n\n=====> 2.- Tabla de simbolos <=====")
+    # for elemento in conjunto_sin_duplicados.keys():
+        # print(elemento)
+
+    # print("\n\n=====> 3.- Tabla de errores <=====")
+    # for elemento in errores:
+        # print(elemento)
+    
+    return tira_token

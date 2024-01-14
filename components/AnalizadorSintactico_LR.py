@@ -1,5 +1,6 @@
 import utils.grammar as gm
 import components.TablaAnalisis as ta
+import components.AnalizadorLexico as al
 
 # Get data structure to token strip
 def get_tokens(path):
@@ -79,7 +80,8 @@ def to_analyze(grammar_path, tokens_path):
     # Get the table and more values
     NT, TE, TA = ta.to_create(grammar_path)
     TE.append('$')
-    input = get_tokens(tokens_path)
+    tokens = al.to_analyze(tokens_path)
+    input = tokens.split()
     input.append('$')
     
     # Algorithm
@@ -120,6 +122,6 @@ def to_analyze(grammar_path, tokens_path):
                 error = True
     
     # Get data to interface
-    data_token = gm.get_allDataTokens(tokens_path)
+    program = gm.get_content(tokens_path)
 
-    return analysis, data_token[0], data_token[1]
+    return analysis, program, tokens
