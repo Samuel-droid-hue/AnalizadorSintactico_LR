@@ -1,11 +1,13 @@
 from tkinter import *
+from tkinter import ttk
 import tkinter as tk
 from tkinter import filedialog
 from tkinter import messagebox
 from tkinter import Scrollbar
 
-import components.AnalizadorSintactico_LR as lr
 
+import components.AnalizadorSintactico_LR as lr
+import components.AnalizadorLexico1 as al
 class AnalizadorSintactico():
     
     def __init__(self):
@@ -16,6 +18,10 @@ class AnalizadorSintactico():
         self.program = []
         self.tokens = []
         self.result = []
+        
+        self.sub_tokens = None
+        self.sub_symbols = None
+        self.sub_errors = None
         
         #ventana
         self.root = Tk()
@@ -115,6 +121,75 @@ class AnalizadorSintactico():
     def analyze(self):
         if not self.isAnalyzed:
             self.analizarLR()
+            self.show_tokens()
+            self.show_symbols()
+            self.show_errors()
+            
+    def show_tokens(self):
+        sub = Toplevel(self.root)
+        sub.title("Tira De Tokens")
+        sub.geometry("+100+50")
+        table = ttk.Treeview(sub, columns=("# Linea", "Lexema", "Token"), show="headings")
+        
+        # Configuracion de las cabeceras
+        table.heading("# Linea", text="# Linea")
+        table.heading("Lexema", text="Lexema")
+        table.heading("Token", text="Token")
+        # Configuracion de las columnas
+        table.column("# Linea", width=100, anchor="center")
+        table.column("Lexema", width=100, anchor="center")
+        table.column("Token", width=100, anchor="center")
+        
+        for elemento in al.Application.total:
+            partes= elemento.split(',')
+            if len(partes) >= 3:
+                linea = partes[0].strip()
+                lexema = partes[1].strip()
+                token = partes[2].strip()
+                # Insertar los valores en la tabla
+                table.insert("", END, values=(linea, lexema, token))
+        table.pack()
+        
+    def show_symbols(self):
+
+        if self.sub_symbols is None or not self.sub_symbols.winfo_exists():
+            sub = Toplevel(self.root)
+            sub.title("Tira De Simbolos")
+            sub.geometry("+100+400")
+            table = ttk.Treeview(sub, columns=("ID", "Valor", "Funcion"), show="headings")
+            # Configuracion de las cabeceras
+            table.heading("ID", text="ID")
+            table.heading("Valor", text="Valor")
+            table.heading("Funcion", text="Funcion")
+            # Configuracion de las columnas
+            table.column("ID", width=100, anchor="center")
+            table.column("Valor", width=100, anchor="center")
+            table.column("Funcion", width=100, anchor="center")
+            for elemento in al.Application.conjunto_sin_duplicados:
+                table.insert("", END, values=elemento)
+            table.pack()
+
+    def show_errors(self):
+        if self.sub_errors is None or not self.sub_errors.winfo_exists():
+            sub = Toplevel(self.root)
+            sub.title("Tira De Errores")
+            sub.geometry("+1150+50")
+            table = ttk.Treeview(sub, columns=("# Linea", "Valor", "Funcion"), show="headings")
+            # Configuracion de las cabeceras
+            table.heading("# Linea", text="# Linea")
+            table.heading("Valor", text="Valor")
+            table.heading("Funcion", text="Funcion")
+            # Configuracion de las columnas
+            table.column("# Linea", width=100, anchor="center")
+            table.column("Valor", width=100, anchor="center")
+            table.column("Funcion", width=100, anchor="center")
+            
+            for elemento in al.Application.errores:
+                table.insert("", END, values=elemento)
+            table.pack()
+
+
+    
     
     def analizarLR(self):
         grammar_path = self.grammar_entry.get()

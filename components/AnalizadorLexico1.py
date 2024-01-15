@@ -15,7 +15,6 @@ class Application:
         # Variable especificas de la aplicacion
         self.total = []
         self.conjunto_sin_duplicados = []
-        self.tira_tokens = []
         self.errores = []
         
         self.analyzed = False
@@ -36,160 +35,32 @@ class Application:
         self.frame = Frame(self.root, background="#FFFFDD", relief=SUNKEN, padx=20, pady=20)
         self.frame.pack(padx=20, pady=20)
 
-        boton_open = Button(self.frame, text="Abrir Archivo", background="#C0EFD2", command=self.open_file)
-        boton_open.grid(row=0, column=0, padx=10, pady=10)
 
         # Crear aqui mas botones
         # Posicionar los botones solo por filas y columnas!
 
         # Creacion del boton obtener resultado
-        boton_get = Button(self.frame, text="Analizar", background="#C0EFD2", command=self.get_result)
+        boton_get = Button(self.frame, text="Analizar", background="#C0EFD2", command=self.to_analizar)
         boton_get.grid(row=0, column=1, padx=10, pady=10)
 
-        boton_tokens = Button(self.frame, text="Tira Tokens", background="#C0EFD2", command=self.show_tokens)
-        boton_tokens.grid(row=0, column=2, padx=10, pady=10)
-
-        boton_symbols = Button(self.frame, text="Tabla Simbolos", background="#C0EFD2", command=self.show_symbols)
-        boton_symbols.grid(row=0, column=3, padx=10, pady=10)
-
-        boton_errors = Button(self.frame, text="Tabla Errores", background="#C0EFD2", command=self.show_errors)
-        boton_errors.grid(row=0, column=4, padx=10, pady=10)
-
-        # Estilo para la tabla
-        style = ttk.Style()
-        style.theme_use("clam")
-        style.configure("Treeview", background="#D3D3D3", foreground="black", rowheight=25, fieldbackground="#D3D3D3")
-        style.map('Treeview', background=[('selected', '#E9D6AF')])
-        style.map('Treeview', foreground=[('selected', 'black')])
-    
-    def open_file(self):
-        file = filedialog.askopenfilename(filetype=[("Archivos de texto", "*.txt")])
-        
-        if file:
-            self.file = file
-            messagebox.showinfo("Analizador Lexico", "Archivo seleccionado correctamente!")
-        else:
-            messagebox.showerror("Analizador Lexico", "No se selecciono ningun archivo!")
 
     # Funcion MODIFICABLE
     # Insertar aqui su logica de BACKEND!
-    def get_result(self):
-        if self.file:
+    def to_analizar(self,path):
+        analizador= AnalizadorLexico()
+        file=path
+        caracteres_separadores = analizador.caracteres
+        letra= string.ascii_letters + string.digits + '.' + "'" + "_" +'['+']'+'!'
+        self.errores = analizador.encontrar_error(file,caracteres_separadores,letra)
+        tira_tokens,self.total,palabras_id= analizador.tokenizar(file)
+        self.conjunto_sin_duplicados = OrderedDict()
+        # Iteración sobre la lista palabras_id_unicas para crear un conjunto sin duplicados:
+        for elemento in palabras_id:
+            self.conjunto_sin_duplicados[elemento] = None  # Usamos el objeto None como marcador
+            
+        self.analyzed = True
+        return tira_tokens
         
-            analizador= AnalizadorLexico()
-            caracteres_separadores = analizador.caracteres
-            letra= string.ascii_letters + string.digits + '.' + "'" + "_" +'['+']'+'!'
-            self.errores = analizador.encontrar_error(self.file,caracteres_separadores,letra)
-            self.tira_tokens,self.total,palabras_id= analizador.tokenizar(self.file)
-
-            self.conjunto_sin_duplicados = OrderedDict()
-
-            # Iteración sobre la lista palabras_id_unicas para crear un conjunto sin duplicados:
-
-            for elemento in palabras_id:
-                self.conjunto_sin_duplicados[elemento] = None  # Usamos el objeto None como marcador
-                
-            self.analyzed = True
-            messagebox.showinfo("Analizador Lexico", "El archivo se analizo con exito!")
-        else:
-            self.analyzed = False
-            messagebox.showerror("Analizador Lexico", "No ha seleccionado un archivo!")
-        
-
-    def show_tokens(self):
-        if self.analyzed:
-            if self.sub_tokens is None or not self.sub_tokens.winfo_exists():
-                sub = Toplevel(self.root)
-                sub.title("Tira De Tokens")
-                sub.geometry("+100+50")
-
-                table = ttk.Treeview(sub, columns=("# Linea", "Lexema", "Token"), show="headings")
-                
-                # Configuracion de las cabeceras
-                table.heading("# Linea", text="# Linea")
-                table.heading("Lexema", text="Lexema")
-                table.heading("Token", text="Token")
-
-                # Configuracion de las columnas
-                table.column("# Linea", width=100, anchor="center")
-                table.column("Lexema", width=100, anchor="center")
-                table.column("Token", width=100, anchor="center")
-                
-                for elemento in self.total:
-                    partes= elemento.split(',')
-                    if len(partes) >= 3:
-                        linea = partes[0].strip()
-                        lexema = partes[1].strip()
-                        token = partes[2].strip()
-
-                        # Insertar los valores en la tabla
-                        table.insert("", END, values=(linea, lexema, token))
-
-                table.pack()
-                self.sub_tokens = sub
-            else:
-                self.sub_tokens.lift()
-        else:
-            messagebox.showerror("Analizador Lexico", "No ha analizado el archivo!")
-    
-    def show_symbols(self):
-        if self.analyzed:
-            if self.sub_symbols is None or not self.sub_symbols.winfo_exists():
-                sub = Toplevel(self.root)
-                sub.title("Tira De Simbolos")
-                sub.geometry("+100+400")
-
-                table = ttk.Treeview(sub, columns=("ID", "Valor", "Funcion"), show="headings")
-
-                # Configuracion de las cabeceras
-                table.heading("ID", text="ID")
-                table.heading("Valor", text="Valor")
-                table.heading("Funcion", text="Funcion")
-
-                # Configuracion de las columnas
-                table.column("ID", width=100, anchor="center")
-                table.column("Valor", width=100, anchor="center")
-                table.column("Funcion", width=100, anchor="center")
-
-                for elemento in self.conjunto_sin_duplicados:
-                    table.insert("", END, values=elemento)
-
-                table.pack()
-                self.sub_symbols = sub  
-            else:
-                self.sub_symbols.lift()
-        else:
-            messagebox.showerror("Analizador Lexico", "No ha analizado el archivo!")
-    
-    def show_errors(self):
-        if self.analyzed:
-            if self.sub_errors is None or not self.sub_errors.winfo_exists():
-                sub = Toplevel(self.root)
-                sub.title("Tira De Errores")
-                sub.geometry("+1150+50")
-
-                table = ttk.Treeview(sub, columns=("# Linea", "Valor", "Funcion"), show="headings")
-
-                # Configuracion de las cabeceras
-                table.heading("# Linea", text="# Linea")
-                table.heading("Valor", text="Valor")
-                table.heading("Funcion", text="Funcion")
-
-                # Configuracion de las columnas
-                table.column("# Linea", width=100, anchor="center")
-                table.column("Valor", width=100, anchor="center")
-                table.column("Funcion", width=100, anchor="center")
-
-                for elemento in self.errores:
-                    table.insert("", END, values=elemento)
-
-                table.pack()
-                self.sub_errors = sub
-            else:
-                self.sub_errors.lift() 
-        else:
-            messagebox.showerror("Analizador Lexico", "No ha analizado el archivo!")
-
 class AnalizadorLexico:
     def __init__(self):
         self.reservadas = {
