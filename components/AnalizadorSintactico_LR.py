@@ -77,10 +77,11 @@ def to_analyze(grammar_path, tokens_path):
     production = []
     analysis = []
 
+    tokens = al.Application.to_analizar(al.Application,tokens_path)
+    # print(tokens)
     # Get the table and more values
     NT, TE, TA = ta.to_create(grammar_path)
     TE.append('$')
-    tokens = al.Application.to_analizar(al.Application,tokens_path)
     #tokens = al.to_analyze(tokens_path)
     input = tokens.split()
     input.append('$')

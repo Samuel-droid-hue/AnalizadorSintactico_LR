@@ -105,9 +105,9 @@ class AnalizadorLexico:
             ('COMENT',  r'\/\/.*'),             # &&
             ('literalCad', r'"([^"\\]*(\\.[^"\\]*)*)"'),
             ('literalCar', r"'([^'\\]*(\\.[^'\\]*)*)'"),
-            ('ARRAY',r'[a-zA-Z1-9_]\w*\[\d+\]'),        #arreglos
-            ('ARRAYAP',r'\*[a-zA-Z1-9]*.\[[1-9]*\]'),        #apuntadores arreglos
-            ('APUNT',r'\*[a-zA-Z_]\w*'),        #apuntadores
+            #('ARRAY',r'[a-zA-Z1-9_]\w*\[\d+\]'),        #arreglos
+            #('ARRAYAP',r'\*[a-zA-Z1-9]*.\[[1-9]*\]'),        #apuntadores arreglos
+            #('APUNT',r'\*[a-zA-Z_]\w*'),        #apuntadores
             ('CORCHETEA', r'\['),           # [
             ('CORCHETEC', r'\]'),           # ]
             ('IGUAL', r'\='),            # =
@@ -168,16 +168,12 @@ class AnalizadorLexico:
                     
                     # Imprimir información sobre un Token
                     if token_tipo != 'id'and token_tipo != 'literalCad' and token_tipo != 'literalCar' and token_tipo != 'nint'and token_tipo != 'nfloat':
-                        if token_tipo == 'ARRAY' or token_tipo == 'ARRAYAP' or token_tipo == 'APUNT':
-                            total += ["{2}  , {1}  , {0} ".format("id", token_lexema, self.lin_num)]
-                            tira_token += "id "
-                        else:
-                            total += ["{2} , {1}  , {1} ".format(token_tipo, token_lexema, self.lin_num)]
-                            tira_token += token_lexema +" "
+                        total += ["{2} , {1}  , {1} ".format(token_tipo, token_lexema, self.lin_num)]
+                        tira_token += token_lexema +" "
                     else:
                         total += ["{2} , {1}  , {0} ".format(token_tipo, token_lexema, self.lin_num)]
                         tira_token += token_tipo + " "
-                    if token_tipo == 'id' or token_tipo == 'ARRAY' or token_tipo == 'ARRAYAP' or token_tipo == 'APUNT':
+                    if token_tipo == 'id':
                         simbolos.append((token_lexema,(0),(0)))
         return tira_token, total, simbolos 
 
