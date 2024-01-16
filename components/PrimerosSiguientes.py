@@ -175,7 +175,8 @@ def PrimerosYsiguientes(TEaux,NTaux,Reglasaux):
         Siguientes.append(siguiente(SimboloNoTerminal))
     for i in range(math.floor(len(cadena)/2)):
         for k in range(len(TE)):
-            TE[k]=TE[k].replace(cadena[i*2+1],cadena[i*2])
+            #TE[k]=TE[k].replace(cadena[i*2+1],cadena[i*2])
+            TE[k]=replace_word(TE[k],cadena[i*2+1], cadena[i*2])
     for i in range(math.floor(len(cadena)/2)):
         for k in range(len(Siguientes)):
             for j in range(len(Siguientes[k])):
