@@ -27,7 +27,8 @@ def get_action(TA, NT, TE, s, a):
         j = TE.index(a)
     else:
         j = len(TE) + NT.index(a)
-    
+        j -= 1
+
     return TA[i][j]
 
 def find_error(row, TE):
@@ -35,6 +36,7 @@ def find_error(row, TE):
     symbols = []
     n = len(TE)-1
 
+    # Search into table row for not nulls values
     for i in range(0, n):
         if row[i] != '  ':
             indexs.append(i)
@@ -85,6 +87,11 @@ def to_analyze(grammar_path, tokens_path):
     #tokens = al.to_analyze(tokens_path)
     input = tokens.split()
     input.append('$')
+
+    #################################
+    ta.imprimirTabla(TA, TE, NT)
+    print(len(TA[0]), " == ", len(TE)+len(NT))
+    #################################
     
     # Algorithm
     stack.append(0)
