@@ -244,7 +244,14 @@ def element_lock(element):
             elif n != c and n in not_terminals:
                 if search_matches(result, queue[0]) is False:
                     result.append(queue.pop(0))
-                queue = move_dot_together(search_productions(n))
+                ###########################################################
+                # HERE IS THE ERROR!!!!
+                queue_aux = move_dot_together(search_productions(n))
+                for item in queue_aux:
+                    queue.append(item)
+                # queue.append(move_dot_together(search_productions(n)))
+                # queue = move_dot_together(search_productions(n))
+                ###########################################################
         
             # Caso para el epsilon donde solamente se calcula el L -> .
             elif n == '@':

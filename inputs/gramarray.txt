@@ -1,0 +1,10 @@
+S V W T
+; id [ ] int nint char float
+S' -> S $
+S -> T V ;
+V -> id W
+W -> [ nint ] W
+W -> @
+T -> int
+T -> char
+T -> float

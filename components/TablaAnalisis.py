@@ -1,4 +1,4 @@
-from components.ColeccionCanonica import coleccion_canonica
+from components.ColeccionCanonica import coleccion_canonica, status_format
 from components.PrimerosSiguientes import PrimerosYsiguientes
 from utils.grammar import get_TAgrammar
 
@@ -240,6 +240,14 @@ def to_create(path):
     PYS = PrimerosYsiguientes(TE, NT, Reglas2)  #obtiene primeros y siguientes, en un diccionario
     siguientes = PYS['S']       #guarda solo la lista de siguientes, para usarla en tablaDeAnalisisSintactico()
     ir_a_NT, ir_a_TE, states = coleccion_canonica(NT, TE, Reglas)   #obtiene los ir_a de terminales y no terminales y la lista de estados
+
+    ########################################################
+    # print(status_format(ir_a_TE))
+    # print(status_format(ir_a_NT))
+    for i in states:
+        print(states.index(i), " ", i)
+    ########################################################
+
     tablaAS = tablaDeAnalisisSintactico(Reglas, states, ir_a_TE, ir_a_NT, siguientes, TE, NT)   #obtiene la tabla de análisis sintáctico
     
     # print("-------------REGLAS2----------")
