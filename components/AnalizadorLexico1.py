@@ -59,7 +59,7 @@ class Application:
             self.conjunto_sin_duplicados[elemento] = None  # Usamos el objeto None como marcador
             
         self.analyzed = True
-        return tira_tokens
+        return tira_tokens, self.total
         
 class AnalizadorLexico:
     def __init__(self):
@@ -168,8 +168,8 @@ class AnalizadorLexico:
                     
                     # Imprimir información sobre un Token
                     if token_tipo != 'id'and token_tipo != 'literalCad' and token_tipo != 'literalCar' and token_tipo != 'nint'and token_tipo != 'nfloat':
-                        total += ["{2} , {1}  , {1} ".format(token_tipo, token_lexema, self.lin_num)]
-                        tira_token += token_lexema +" "
+                        total += ["{2} , {1}  , {1} ".format("id", token_lexema, self.lin_num)]
+                        tira_token += token_lexema + " "
                     else:
                         total += ["{2} , {1}  , {0} ".format(token_tipo, token_lexema, self.lin_num)]
                         tira_token += token_tipo + " "

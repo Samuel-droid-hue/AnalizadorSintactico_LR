@@ -1,6 +1,6 @@
 E T F
 id + * ( ) 
-E' -> E $
+E' -> E  
 E -> E + T
 E -> T
 T -> T * F

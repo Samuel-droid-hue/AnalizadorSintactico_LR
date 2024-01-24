@@ -81,7 +81,7 @@ def to_analyze(grammar_path, tokens_path):
     production = []
     analysis = []
 
-    tokens = al.Application.to_analizar(al.Application,tokens_path)
+    tokens, total = al.Application.to_analizar(al.Application,tokens_path)
     # print(tokens)
     # Get the table and more values
     NT, TE, TA = ta.to_create(grammar_path)
