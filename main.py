@@ -4,6 +4,7 @@ import tkinter as tk
 from tkinter import filedialog
 from tkinter import messagebox
 from tkinter import Scrollbar
+import os
 
 
 import components.AnalizadorSintactico_LR as lr
@@ -42,11 +43,6 @@ class AnalizadorSintactico():
         self.grammar_entry.grid(row=0, column=1, padx=10, pady=10)
         self.grammar_entry.insert(0, "")
         self.grammar_entry.config(state="readonly")
-        # Set text default!
-        self.grammar_entry.config(state="normal")
-        self.grammar_entry.delete(0, tk.END)
-        self.grammar_entry.insert(0, r"grammar\grammar(1).txt")
-        self.grammar_entry.config(state="readonly")
 
         open_button_tokens = Button(self.frame, text="Abrir Archivo", background="#C0EFD2", command=lambda:self.open_file(self.tokens_entry))
         open_button_tokens.grid(row=1, column=0, padx=10, pady=10)
@@ -55,12 +51,6 @@ class AnalizadorSintactico():
         self.tokens_entry.grid(row=1, column=1, padx=10, pady=10)
         self.tokens_entry.insert(0, "")
         self.tokens_entry.config(state="readonly")
-        # Set text default!
-        self.tokens_entry.config(state="normal")
-        self.tokens_entry.delete(0, tk.END)
-        self.tokens_entry.insert(0, r"code\code(grammar 1).txt")
-        self.tokens_entry.config(state="readonly")
-        
         
         self.analyze_button = Button(self.frame, text="Analizar", background="#C0EFD2", command=self.analyze)
         self.analyze_button.grid(row=2, column=0, padx=20, pady=20)
