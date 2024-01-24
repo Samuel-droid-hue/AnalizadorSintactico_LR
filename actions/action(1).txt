@@ -1,0 +1,7 @@
+
+{E.trad := E.trad || "+" || T.trad}
+{E.trad := T.trad}
+{T.trad := T.trad || "*" || F.trad}
+{T.trad := F.trad}
+{F.trad := "(" || E.trad || ")"}
+{F.trad := id.valex}

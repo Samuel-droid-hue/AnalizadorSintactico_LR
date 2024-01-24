@@ -53,11 +53,11 @@ def get_rowda(stack, input, action):
 
     return [column1,  column2, action]
 
-def get_rowr(stack, input, action, production):
+def get_rowr(stack, input, action, production, semantic):
     column1 = ' '.join(map(str, stack))
     column2 = ' '.join(input)
     column3 = '->'.join(production)
-    column3 = action + ' ' + column3
+    column3 = action + ' ' + column3 + ' ' + semantic
 
     return [column1, column2, column3]
 
@@ -67,6 +67,8 @@ def get_rowe(stack, input, symbols):
     column3 = 'Error se esperaba ' + ' o '.join(symbols)
 
     return [column1, column2, column3]
+
+
 
 # ------------- ANALYZER ------------- #
 def to_analyze(grammar_path, tokens_path):
@@ -87,6 +89,9 @@ def to_analyze(grammar_path, tokens_path):
     #tokens = al.to_analyze(tokens_path)
     input = tokens.split()
     input.append('$')
+
+    # Get semantic actions
+    semantic = gm.get_semantic("actions/action(1).txt")
 
     #################################
     ta.imprimirTabla(TA, TE, NT)
@@ -111,7 +116,7 @@ def to_analyze(grammar_path, tokens_path):
             elif case_action[0] == 'r':
                 production = augmentedGrammar[index]
                 # print(stack, "\t\t", input, "\t\t", case_action, " ", production)
-                analysis.append(get_rowr(stack, input, case_action, production))
+                analysis.append(get_rowr(stack, input, case_action, production, semantic[index]))
                 if production[-1] != '@':
                     for j in range(0, 2*(production[-1].count(' ')+1)):
                         stack.pop()

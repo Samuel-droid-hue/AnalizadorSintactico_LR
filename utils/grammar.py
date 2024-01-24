@@ -31,3 +31,10 @@ def get_content(path):
         content = file.read()
 
     return content
+
+def get_semantic(path):
+    with open(path, "r") as file:
+        content = file.readlines()
+        content = [line.strip() for line in content]
+
+    return content
