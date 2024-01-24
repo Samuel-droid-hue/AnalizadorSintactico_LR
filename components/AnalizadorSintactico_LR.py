@@ -2,6 +2,34 @@ import utils.grammar as gm
 import components.TablaAnalisis as ta
 import components.AnalizadorLexico1 as al
 
+class Token:
+    def __init__(self, token, lexema):
+        self.token = token
+        self.lexema = lexema
+
+    def __str__(self):
+        return self.token + "." + self.lexema
+
+# Get data to input stack
+def get_input(tokens):
+    # Convert tokens to data structure
+    data = []
+    for token in tokens:
+        row = token.split(',')
+        for r in range(len(row)):
+            row[r] = row[r].strip()
+        data.append(row)
+    
+    # Get input stack
+    input = []
+    for d in data:
+        if d[1] != d[2]:
+            input.append(Token(d[2], d[1]))
+        else:
+            input.append(d[1])
+
+    return input
+
 # Get data structure to token strip
 def get_tokens(path):
     with open(path, "r") as file:
@@ -87,6 +115,7 @@ def to_analyze(grammar_path, tokens_path):
     NT, TE, TA = ta.to_create(grammar_path)
     TE.append('$')
     #tokens = al.to_analyze(tokens_path)
+    test_input = get_input(total)
     input = tokens.split()
     input.append('$')
 
