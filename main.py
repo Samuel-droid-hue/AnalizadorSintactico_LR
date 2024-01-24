@@ -187,9 +187,6 @@ class AnalizadorSintactico():
             for elemento in al.Application.errores:
                 table.insert("", END, values=elemento)
             table.pack()
-
-
-    
     
     def analizarLR(self):
         grammar_path = self.grammar_entry.get()
