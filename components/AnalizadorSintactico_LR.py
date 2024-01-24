@@ -8,7 +8,7 @@ class Token:
         self.lexema = lexema
 
     def __str__(self):
-        return self.token + "." + self.lexema
+        return f"{self.token}.{self.lexema}"
 
 # Get data to input stack
 def get_input(tokens):
@@ -77,13 +77,13 @@ def find_error(row, TE):
 # Get format to rows
 def get_rowda(stack, input, action):
     column1 = ' '.join(map(str, stack))
-    column2 = ' '.join(input)
+    column2 = ' '.join(str(e) for e in input)
 
     return [column1,  column2, action]
 
 def get_rowr(stack, input, action, production, semantic):
     column1 = ' '.join(map(str, stack))
-    column2 = ' '.join(input)
+    column2 = ' '.join(str(e) for e in input)
     column3 = '->'.join(production)
     column3 = action + ' ' + column3 + ' ' + semantic
 
@@ -91,7 +91,7 @@ def get_rowr(stack, input, action, production, semantic):
 
 def get_rowe(stack, input, symbols):
     column1 = ' '.join(map(str, stack))
-    column2 = ' '.join(input)
+    column2 = ' '.join(str(e) for e in input)
     column3 = 'Error se esperaba ' + ' o '.join(symbols)
 
     return [column1, column2, column3]
@@ -115,8 +115,8 @@ def to_analyze(grammar_path, tokens_path):
     NT, TE, TA = ta.to_create(grammar_path)
     TE.append('$')
     #tokens = al.to_analyze(tokens_path)
-    test_input = get_input(total)
-    input = tokens.split()
+    input = get_input(total)
+    # input = tokens.split()
     input.append('$')
 
     # Get semantic actions
@@ -131,20 +131,21 @@ def to_analyze(grammar_path, tokens_path):
     stack.append(0)
 
     while not (accept or error):
-        case_action = get_action(TA, NT, TE, stack[-1], input[0])
+        # Get the atributte of the object is is required
+        case_action = get_action(TA, NT, TE, stack[-1], input[0].token if isinstance(input[0], Token) else input[0])
         if case_action[0] in {'d', 'r'}:
             # Calculates index of dn or rn
             index = case_action[1:]
             index = int(index)
             if case_action[0] == 'd':
-                # print(stack, "\t\t", input, "\t\t", case_action)
+                # Modify the input to get the token and lexema on the row
                 analysis.append(get_rowda(stack, input, case_action))
                 stack.append(input[0])
                 stack.append(index)
                 input.pop(0)
             elif case_action[0] == 'r':
                 production = augmentedGrammar[index]
-                # print(stack, "\t\t", input, "\t\t", case_action, " ", production)
+                # Modify the input to get the token and lexema on the row
                 analysis.append(get_rowr(stack, input, case_action, production, semantic[index]))
                 if production[-1] != '@':
                     for j in range(0, 2*(production[-1].count(' ')+1)):
