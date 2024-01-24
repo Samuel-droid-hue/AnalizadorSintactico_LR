@@ -1,0 +1,1 @@
+( (suma1 + suma2) * mult) / div

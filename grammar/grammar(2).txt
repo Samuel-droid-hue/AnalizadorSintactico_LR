@@ -6,3 +6,4 @@ L -> , id L
 L -> @
 T -> float
 T -> int
+T -> char
