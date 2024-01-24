@@ -129,6 +129,7 @@ def to_analyze(grammar_path, tokens_path):
                 symbols = find_error(TA[stack[-1]], TE)
                 # print(stack, "\t\t", input, "\t\tError se esperaba: ", symbols)
                 analysis.append(get_rowe(stack, input, symbols))
+                al.Application.errores.append((1, symbols))
                 error = True
     
     # Get data to interface
