@@ -1,5 +1,5 @@
 D L T
-id ; , float int 
+id ; , float int char
 D' -> D $
 D -> T id L ;
 L -> , id L
