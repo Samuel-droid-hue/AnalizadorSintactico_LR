@@ -27,14 +27,14 @@ def get_action(TA, NT, TE, s, a):
         j = TE.index(a)
     else:
         j = len(TE) + NT.index(a)
-        j -= 1
+        # j -= 1
 
     return TA[i][j]
 
 def find_error(row, TE):
     indexs = []
     symbols = []
-    n = len(TE)-1
+    n = len(TE)
 
     # Search into table row for not nulls values
     for i in range(0, n):
@@ -118,6 +118,7 @@ def to_analyze(grammar_path, tokens_path):
                 j = stack[-1]
                 stack.append(production[0])
                 ir_a = get_action(TA, NT, TE, j, production[0])
+                
                 stack.append(ir_a)
         else:
             if case_action == 'AC':
