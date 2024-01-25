@@ -26,17 +26,17 @@ class AnalizadorSintactico():
         
         #ventana
         self.root = Tk()
-        self.root.geometry("900x700+400+50")
+        self.root.geometry("900x720+400+50")
         self.root.title("TAS")
         self.root.config(bg="#34495E")
         self.root.resizable(False, False)
 
         # Componentes interfaz
-        self.frame = Frame(self.root, background="#99A3A4", relief=SUNKEN, padx=20, pady=20)
+        self.frame = Frame(self.root, background="#99A3A4", relief=SUNKEN, padx=2, pady=2)
         self.frame.pack(padx=10, pady=10)
 
 
-        open_button = Button(self.frame, text="Abrir Gramatica", background="#C0EFD2", command=lambda:self.open_file(self.grammar_entry))
+        open_button = Button(self.frame, text="Abrir Gramática", background="#C0EFD2", command=lambda:self.open_file(self.grammar_entry))
         open_button.grid(row=0, column=0, padx=10, pady=10)
         
         self.grammar_entry = Entry(self.frame, width=30)
@@ -52,11 +52,20 @@ class AnalizadorSintactico():
         self.tokens_entry.insert(0, "")
         self.tokens_entry.config(state="readonly")
         
+        
+        open_button_action = Button(self.frame, text="Abrir Acción", background="#C0EFD2", command=lambda:self.open_file(self.action_entry))
+        open_button_action.grid(row=2, column=0, padx=10, pady=10)
+        
+        self.action_entry = Entry(self.frame, width=30)
+        self.action_entry.grid(row=2, column=1, padx=10, pady=10)
+        self.action_entry.insert(0, "")
+        self.action_entry.config(state="readonly")
+        
         self.analyze_button = Button(self.frame, text="Analizar", background="#C0EFD2", command=self.analyze)
-        self.analyze_button.grid(row=2, column=0, padx=20, pady=20)
+        self.analyze_button.grid(row=3, column=0, padx=20, pady=20)
         
         clear_button = Button(self.frame, text="LimpiarTodo", background="#C0EFD2", command=self.clear)
-        clear_button.grid(row=2, column=1, padx=20, pady=20)
+        clear_button.grid(row=3, column=1, padx=20, pady=20)
 
 
         self.frame_show = Frame(self.root, background="#99A3A4", relief=FLAT, padx=20, pady=20)
@@ -105,6 +114,10 @@ class AnalizadorSintactico():
         self.tokens_entry.config(state="normal")
         self.tokens_entry.delete(0, END)
         self.tokens_entry.config(state="readonly")
+        
+        self.action_entry.config(state="normal")
+        self.action_entry.delete(0, END)
+        self.action_entry.config(state="readonly")
         
         # Variables
         self.analysis = []
@@ -191,10 +204,11 @@ class AnalizadorSintactico():
     def analizarLR(self):
         grammar_path = self.grammar_entry.get()
         tokens_path = self.tokens_entry.get()
+        action_path = self.action_entry.get()
         font_style = ("Arial", 10, "bold")
         
         if grammar_path and tokens_path:
-            analysis, program, tokens = lr.to_analyze(grammar_path, tokens_path, actions_path="actions/action(1).txt")
+            analysis, program, tokens = lr.to_analyze(grammar_path, tokens_path, action_path)
 
             label = Label(self.table_frame,text=f"Programa : {program}",borderwidth=2,relief="solid",background="#16C4DF")
             label.grid(row=0, column=0, padx=2, pady=2)
@@ -215,7 +229,6 @@ class AnalizadorSintactico():
                 for j in range(len(analysis[i])):
                     self.result+=f"{analysis[i][j]}|"
                 self.result+=('\n\n|')
-            print(self.result)
             
             header_columns = self.result.strip().split('|') 
             

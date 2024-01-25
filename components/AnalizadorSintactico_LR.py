@@ -124,7 +124,7 @@ def to_analyze(grammar_path, tokens_path, actions_path):
 
     #################################
     ta.imprimirTabla(TA, TE, NT)
-    print(len(TA[0]), " == ", len(TE)+len(NT))
+
     #################################
     
     # Algorithm
