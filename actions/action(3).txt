@@ -1,0 +1,8 @@
+
+[S.value := {T.value} {V.value} ;]
+[V.value := {id.value} {W.value}]
+[W.value := [ {nint.value} ] {W.value}]
+[W.value :=  ]
+[T.value := let]
+[T.value := let]
+[T.value := let]

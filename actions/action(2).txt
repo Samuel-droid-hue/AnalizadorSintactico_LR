@@ -1,0 +1,7 @@
+
+[D.value := {T.value} {id.value} {L.value} ;]
+[L.value := , {id.value} {L.value}]
+[L.value :=  ]
+[T.value := let]
+[T.value := let]
+[T.value := let]

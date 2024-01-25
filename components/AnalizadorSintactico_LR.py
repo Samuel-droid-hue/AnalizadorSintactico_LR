@@ -120,7 +120,7 @@ def to_analyze(grammar_path, tokens_path):
     input.append('$')
 
     # Get semantic actions
-    semantic = gm.get_semantic("actions/action(1).txt")
+    semantic = gm.get_semantic("actions/action(2).txt")
 
     #################################
     ta.imprimirTabla(TA, TE, NT)
@@ -131,6 +131,7 @@ def to_analyze(grammar_path, tokens_path):
     stack.append(0)
 
     while not (accept or error):
+        print(analysis)
         # Get the atributte of the object is is required
         case_action = get_action(TA, NT, TE, stack[-1], input[0].token if isinstance(input[0], Token) else input[0])
         if case_action[0] in {'d', 'r'}:
