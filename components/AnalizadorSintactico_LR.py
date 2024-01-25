@@ -8,7 +8,7 @@ class Token:
         self.lexema = lexema
 
     def __str__(self):
-        return f"{self.token}.{self.lexema}"
+        return f"{self.token}.\"{self.lexema}\""
 
 # Get data to input stack
 def get_input(tokens):
@@ -146,13 +146,20 @@ def to_analyze(grammar_path, tokens_path):
             elif case_action[0] == 'r':
                 production = augmentedGrammar[index]
                 # Modify the input to get the token and lexema on the row
-                analysis.append(get_rowr(stack, input, case_action, production, semantic[index]))
+                semantic_action = semantic[index]
+                # Delete the first and last character of the string
+                analysis.append(get_rowr(stack, input, case_action, production, semantic_action))
                 if production[-1] != '@':
+                    # Save not terminal symbols to translate
+                    back = []
                     for j in range(0, 2*(production[-1].count(' ')+1)):
-                        stack.pop()
+                        top = stack.pop()
+                        if isinstance(top, Token):
+                            back.append(top)
                 j = stack[-1]
-                stack.append(production[0])
-                ir_a = get_action(TA, NT, TE, j, production[0])
+                t = translate(production[0], semantic_action, back)
+                stack.append(t)
+                ir_a = get_action(TA, NT, TE, j, t.token)
                 
                 stack.append(ir_a)
         else:
@@ -171,3 +178,17 @@ def to_analyze(grammar_path, tokens_path):
     program = gm.get_content(tokens_path)
 
     return analysis, program, tokens
+
+def translate(production, semantic, stack):
+    semantic = semantic[1:-1]
+    semantic = semantic.split(" := ")
+    semantic = semantic[1]
+    
+    # Looking for id and NOT terminal symbols on production
+    while stack:
+        i = stack.pop()
+        semantic = semantic.replace('{'+i.token+'.value}', str(i.lexema))
+
+    element = Token(production, semantic)
+
+    return element
