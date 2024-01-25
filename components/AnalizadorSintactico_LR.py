@@ -99,7 +99,7 @@ def get_rowe(stack, input, symbols):
 
 
 # ------------- ANALYZER ------------- #
-def to_analyze(grammar_path, tokens_path):
+def to_analyze(grammar_path, tokens_path, actions_path):
     # Variables
     augmentedGrammar = gm.get_ASgrammar(grammar_path)
     stack = []
@@ -120,7 +120,7 @@ def to_analyze(grammar_path, tokens_path):
     input.append('$')
 
     # Get semantic actions
-    semantic = gm.get_semantic("actions/action(2).txt")
+    semantic = gm.get_semantic(actions_path)
 
     #################################
     ta.imprimirTabla(TA, TE, NT)

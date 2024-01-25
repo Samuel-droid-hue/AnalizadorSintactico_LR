@@ -194,7 +194,7 @@ class AnalizadorSintactico():
         font_style = ("Arial", 10, "bold")
         
         if grammar_path and tokens_path:
-            analysis, program, tokens = lr.to_analyze(grammar_path, tokens_path)
+            analysis, program, tokens = lr.to_analyze(grammar_path, tokens_path, actions_path="actions/action(1).txt")
 
             label = Label(self.table_frame,text=f"Programa : {program}",borderwidth=2,relief="solid",background="#16C4DF")
             label.grid(row=0, column=0, padx=2, pady=2)
